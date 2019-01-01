@@ -1,0 +1,40 @@
+body {
+    background: #202027;
+    color: #fff;
+    font-family: sans-serif;
+    font-size: 2em;
+    text-align: center;
+}
+
+canvas {
+    border: solid .2em #fff;
+    height: 80vh;
+}
+
+#score {
+    position: absolute;
+    left: 49%;
+}
+
+#instructions {
+    font-size: .8rem;
+    position: absolute;
+    top: 20%;
+    left: 40px;
+    border: 1px solid white;
+    border-radius: 20px;
+    background-color: #101015;
+    box-shadow:2px 2px 10px silver;
+    min-width: 150px;
+    padding: 10px;
+}
+
+@media only screen and (max-width: 800px) {
+    #instructions {
+        position: relative;
+        margin: auto;
+        margin-top: 10px;
+        min-width: 400px;
+        padding: 0;
+    }
+  }
