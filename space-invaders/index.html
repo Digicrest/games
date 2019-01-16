@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Space Invaders</title>
+
+    <link rel="stylesheet" href="./style/main.css">
+    <script src="./js/helpers.js"></script>
+</head>
+<body>
+   <script>
+       let screen, input, frames;
+       let alien_sprite, tank_sprite, city_sprite;
+       let aliens, dir, tank, bullets, cities;
+
+       function main() {
+            screen = new Screen(510, 600);
+            input = new InputHandler();
+
+            let img = new Image();
+            img.addEventListener("load", () => {
+                alien_sprite = [
+                    [new Sprite(this), 0, 0, 22, 16, new Sprite(this, 0, 16, 22, 16)],
+                    [new Sprite(this, 22, 0, 16, 16), new Sprite(this, 22, 16, 16, 16)],
+                    [new Sprite(this, 38, 0, 24, 16), new Sprite(this, 38, 16, 24, 16)],
+                ];
+                tank_sprite = new Sprite(this);
+                city_sprite = new Sprite(this);
+
+                init();
+                run();
+            })
+            img.src = "../assets/sprite-sheet.png"
+       }
+
+       function init() {
+
+       }
+
+       function run() {
+        let loop = function() {
+            update();
+            render();
+            window.requestAnimationFrame(loop, screen.canvas);
+        }
+       }
+
+       function update() {
+            console.log("updated")
+       }
+
+       function render() {
+        screen.drawSprite(alien_sprite[0][0], 10, 10);
+       }
+
+       main();
+   </script>   
+</body>
+</html>
