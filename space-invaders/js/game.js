@@ -83,6 +83,18 @@ function update() {
             i--;
             continue;
         }
+
+        // Collision
+        for (let j = 0; j < aliens.length; j++) {
+            let alien = aliens[j];
+            if(AABBIntersect(bullet.x, bullet.y, bullet.width, bullet.height, alien.x, alien.y, alien.width, alien.height)) {
+                aliens.splice(j, 1);
+                bullets.splice(i, 1);
+                j--;
+                i--; 
+                continue;
+            }
+        }
     }
 
     // Select Random Alien and Shoot Down Toward Player
