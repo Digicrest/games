@@ -1,5 +1,22 @@
 // Helper Functions
 
+// Bullet
+
+class Bullet {
+    constructor(x, y, vel_y, w, h, color) {
+        this.x = x;
+        this.y = y;
+        this.vel_y = vel_y;
+        this.width = w;
+        this.height = h;
+        this.color = color;
+    }
+
+    update() {
+        this.y += this.vel_y;
+    }
+}
+
 // Screen
 class GameScreen {
     constructor(width, height) {
@@ -22,6 +39,11 @@ class GameScreen {
 
     clear() {
         this.ctx.clearRect(0, 0, this.width, this.height);
+    }
+
+    drawBullet(bullet) {
+        this.ctx.fillStyle = bullet.color;
+        this.ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
     }
 }
 
