@@ -2,6 +2,7 @@
 A horribly written space invaders.
 
 Controls: 
+
     Arrow Keys: Left, Right
     Shoot: Space Bar
 
