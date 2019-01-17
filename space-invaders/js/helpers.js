@@ -1,56 +1,64 @@
 // Helper Functions
 
 // Screen
-function Screen(width, height) {
-    this.width = width;
-    this.height = height;
+class GameScreen {
+    constructor(width, height) {
+        this.canvas = document.createElement("canvas");
+        this.canvas.width = this.width = width;
+        this.canvas.height = this.height = height;
 
-    this.canvas = document.createElement("canvas");
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
+        this.ctx = this.canvas.getContext("2d");
+        document.body.appendChild(this.canvas);
+    }
 
-    this.ctx = this.canvas.getContext("2d");
-}
+    drawSprite(sprite, x, y) {
+        this.ctx.drawImage(
+            sprite.image, 
+            sprite.pos_x, sprite.pos_y, 
+            sprite.width, sprite.height, 
+            x, y, sprite.width, sprite.height
+        );
+    }
 
-Screen.prototype.drawSprite = function(sprite, x, y) {
-    this.ctx.drawImage(sprite.image, sprite.x, sprite.y, sprite.width, sprite.height, x, y);
+    clear() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+    }
 }
 
 // Sprite
-function Sprite (image, x, y, w, h) {
-    this.image = image;
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
+class Sprite {
+    constructor(img, x, y, w, h) {
+        this.image = img;
+        this.pos_x = x;
+        this.pos_y = y;
+        this.width = w;
+        this.height = h;
+    }
 }
 
 // Input Handler
-function InputHandler() {
-    this.down = {};
-    this.pressed = {};
+class InputHandler {
+    constructor() {
+        this.down = {};
+        this.pressed = {};
 
-    let _this = this;
+        document.addEventListener("keydown", e => {
+            this.down[e.keyCode] = true;
+        });
 
-    document.addEventListener("keydown", e => {
-        _this.down[e.keyCode] = true;
-    });
-    
-    document.addEventListener("keyup", e => {
-        delete _this.down[e.keyCode];
-        delete _this.pressed[e.keyCode];
-    });
-
-};
-
-InputHandler.prototype.isDown = function(code) {
-    return this.down[code];
-}
-InputHandler.prototype.isPressed = function (code) {
-    if(this.pressed[code]) {
-        return false;
-    } else if (this.down[code]) {
-        return this.pressed[code] = true;
+        document.addEventListener("keyup", e => {
+            delete this.down[e.keyCode];
+            delete this.pressed[e.keyCode];
+        });
     }
-    return false;
+
+    isDown(code) {
+        return this.down[code];
+    }
+
+    isPressed(code) {
+        if (this.pressed[code]) { return false; } 
+        else if (this.down[code]) { return this.pressed[code] = true; }
+        return false;
+    }
 }

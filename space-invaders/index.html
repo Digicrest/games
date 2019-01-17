@@ -11,48 +11,83 @@
 </head>
 <body>
    <script>
-       let screen, input, frames;
+       let gameScreen, input, frames, sprite_frame, level_frame;
        let alien_sprite, tank_sprite, city_sprite;
-       let aliens, dir, tank, bullets, cities;
+       let aliens, direction, tank, bullets, cities;
 
        function main() {
-            screen = new Screen(510, 600);
+            gameScreen = new GameScreen(510, 600);
             input = new InputHandler();
 
-            let img = new Image();
-            img.addEventListener("load", () => {
+            let sprite_sheet = new Image();
+            sprite_sheet.src = "./assets/invaders.png";
+
+            sprite_sheet.addEventListener("load", function () {
                 alien_sprite = [
-                    [new Sprite(this), 0, 0, 22, 16, new Sprite(this, 0, 16, 22, 16)],
-                    [new Sprite(this, 22, 0, 16, 16), new Sprite(this, 22, 16, 16, 16)],
-                    [new Sprite(this, 38, 0, 24, 16), new Sprite(this, 38, 16, 24, 16)],
+                    [ new Sprite(this,  0, 0, 22, 16),  new Sprite(this,  0, 16, 22, 16) ],
+                    [ new Sprite(this, 22, 0, 16, 16),  new Sprite(this, 22, 16, 16, 16) ],
+                    [ new Sprite(this, 38, 0, 24, 16),  new Sprite(this, 38, 16, 24, 16) ],
                 ];
-                tank_sprite = new Sprite(this);
-                city_sprite = new Sprite(this);
+                tank_sprite = new Sprite(this, 62, 0, 22, 16);
+                city_sprite = new Sprite(this, 84, 8, 36, 24);
 
                 init();
                 run();
             })
-            img.src = "../assets/sprite-sheet.png"
+            
        }
 
        function init() {
+            frames = 0;
+            sprite_frame = 0;
+            level_frame = 60;
+            aliens = [];
+            direction = 1;
+            let enemy_row = [ 1, 0, 0, 2, 2 ];
 
+            for (let i = 0; i < enemy_row.length; i++) {
+                for (let j = 0; j < 10; j++) {
+                    const enemy = enemy_row[i];
+                
+                    aliens.push({
+                        sprites: alien_sprite[enemy],
+                        width: alien_sprite[enemy][0].width,
+                        height: alien_sprite[enemy][0].height,
+                        pos_x: 30 + (j * 30) + [0, 4, 0][enemy],
+                        pos_y: 30 + (i * 30),
+                    })
+                }
+            }
        }
 
        function run() {
-        let loop = function() {
-            update();
-            render();
-            window.requestAnimationFrame(loop, screen.canvas);
-        }
+            let loop = function() {
+                update();
+                render();
+                window.requestAnimationFrame(loop, gameScreen.canvas);
+            }
+            window.requestAnimationFrame(loop, gameScreen.canvas);
        }
 
        function update() {
-            console.log("updated")
+           frames++;
+           if (!(frames % level_frame)) {
+               sprite_frame = (sprite_frame + 1) % 2;
+
+               for (let i = 0; i < aliens.length; i++) {
+                   let alien = aliens[i];
+                    alien.pos_x += 30 * direction;
+
+               }
+           }
        }
 
        function render() {
-        screen.drawSprite(alien_sprite[0][0], 10, 10);
+           gameScreen.clear();
+           for(let i = 0; i < aliens.length; i++) {
+               let alien = aliens[i];
+               gameScreen.drawSprite(alien.sprites[sprite_frame], alien.pos_x, alien.pos_y);
+           } 
        }
 
        main();
