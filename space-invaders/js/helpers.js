@@ -14,7 +14,7 @@ class GameScreen {
     drawSprite(sprite, x, y) {
         this.ctx.drawImage(
             sprite.image, 
-            sprite.pos_x, sprite.pos_y, 
+            sprite.x, sprite.y, 
             sprite.width, sprite.height, 
             x, y, sprite.width, sprite.height
         );
@@ -29,8 +29,8 @@ class GameScreen {
 class Sprite {
     constructor(img, x, y, w, h) {
         this.image = img;
-        this.pos_x = x;
-        this.pos_y = y;
+        this.x = x;
+        this.y = y;
         this.width = w;
         this.height = h;
     }

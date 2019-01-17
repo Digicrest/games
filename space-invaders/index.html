@@ -12,7 +12,7 @@
 <body>
    <script>
        let gameScreen, input, frames, sprite_frame, level_frame;
-       let alien_sprite, tank_sprite, city_sprite;
+       let alien_sprites, tank_sprite, city_sprite;
        let aliens, direction, tank, bullets, cities;
 
        function main() {
@@ -23,7 +23,7 @@
             sprite_sheet.src = "./assets/invaders.png";
 
             sprite_sheet.addEventListener("load", function () {
-                alien_sprite = [
+                alien_sprites = [
                     [ new Sprite(this,  0, 0, 22, 16),  new Sprite(this,  0, 16, 22, 16) ],
                     [ new Sprite(this, 22, 0, 16, 16),  new Sprite(this, 22, 16, 16, 16) ],
                     [ new Sprite(this, 38, 0, 24, 16),  new Sprite(this, 38, 16, 24, 16) ],
@@ -43,18 +43,24 @@
             level_frame = 20;
             aliens = [];
             direction = 1;
-            let enemy_row = [ 1, 0, 0, 2, 2 ];
 
+            tank = {
+                sprite: tank_sprite,
+                x: (gameScreen.width - tank_sprite.width) / 2,
+                y: gameScreen.height - (30 + tank_sprite.height) / 2,
+            }
+
+            let enemy_row = [ 1, 0, 0, 2, 2 ];
             for (let i = 0; i < enemy_row.length; i++) {
                 for (let j = 0; j < 10; j++) {
                     const enemy = enemy_row[i];
                 
                     aliens.push({
-                        sprites: alien_sprite[enemy],
-                        width: alien_sprite[enemy][0].width,
-                        height: alien_sprite[enemy][0].height,
-                        pos_x: 30 + (j * 30) + [0, 4, 0][enemy],
-                        pos_y: 30 + (i * 30),
+                        sprites: alien_sprites[enemy],
+                        width: alien_sprites[enemy][0].width,
+                        height: alien_sprites[enemy][0].height,
+                        x: 30 + (j * 30) + [0, 4, 0][enemy],
+                        y: 30 + (i * 30),
                     })
                 }
             }
@@ -70,6 +76,17 @@
        }
 
        function update() {
+
+        if (input.isDown(37)) { // LEFT
+            tank.x -= 4;
+        }
+
+        if (input.isDown(39)) { // RIGHT
+            tank.x += 4;
+        }
+
+        tank.x = Math.max(Math.min(tank.x, gameScreen.width - (30 + tank.sprite.width)), 30);
+
            frames++;
            if (!(frames % level_frame)) {
                sprite_frame = (sprite_frame + 1) % 2;
@@ -78,10 +95,10 @@
 
                for (let i = 0; i < aliens.length; i++) {
                    let alien = aliens[i];
-                    alien.pos_x += 30 * direction;
+                    alien.x += 30 * direction;
 
-                    _max = Math.max(_max, alien.pos_x + alien.width);
-                    _min = Math.min(_min, alien.pos_x);
+                    _max = Math.max(_max, alien.x + alien.width);
+                    _min = Math.min(_min, alien.x);
                }
 
                if (_max > gameScreen.width || _min < 30) {
@@ -89,8 +106,8 @@
 
                     for (let i = 0; i < aliens.length; i++) {
                         let alien = aliens[i];
-                        alien.pos_x += 30 * direction;
-                        alien.pos_y += 30;
+                        alien.x += 30 * direction;
+                        alien.y += 30;
                     }
                }
            }
@@ -98,10 +115,13 @@
 
        function render() {
            gameScreen.clear();
+
            for(let i = 0; i < aliens.length; i++) {
                let alien = aliens[i];
-               gameScreen.drawSprite(alien.sprites[sprite_frame], alien.pos_x, alien.pos_y);
+               gameScreen.drawSprite(alien.sprites[sprite_frame], alien.x, alien.y);
            } 
+
+           gameScreen.drawSprite(tank.sprite, tank.x, tank.y)
        }
 
        main();
