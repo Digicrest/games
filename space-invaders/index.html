@@ -16,7 +16,7 @@
        let aliens, direction, tank, bullets, cities;
 
        function main() {
-            gameScreen = new GameScreen(510, 600);
+            gameScreen = new GameScreen(502, 600);
             input = new InputHandler();
 
             let sprite_sheet = new Image();
@@ -40,7 +40,7 @@
        function init() {
             frames = 0;
             sprite_frame = 0;
-            level_frame = 60;
+            level_frame = 20;
             aliens = [];
             direction = 1;
             let enemy_row = [ 1, 0, 0, 2, 2 ];
@@ -74,10 +74,24 @@
            if (!(frames % level_frame)) {
                sprite_frame = (sprite_frame + 1) % 2;
 
+               let _max = 0, _min = gameScreen.width;
+
                for (let i = 0; i < aliens.length; i++) {
                    let alien = aliens[i];
                     alien.pos_x += 30 * direction;
 
+                    _max = Math.max(_max, alien.pos_x + alien.width);
+                    _min = Math.min(_min, alien.pos_x);
+               }
+
+               if (_max > gameScreen.width || _min < 30) {
+                    direction *= -1;
+
+                    for (let i = 0; i < aliens.length; i++) {
+                        let alien = aliens[i];
+                        alien.pos_x += 30 * direction;
+                        alien.pos_y += 30;
+                    }
                }
            }
        }
