@@ -31,12 +31,57 @@ function init() {
     aliens = [];
     direction = 1;
     bullets = [];
-
     tank = {
         sprite: tank_sprite,
         x: (gameScreen.width - tank_sprite.width) / 2,
         y: gameScreen.height - (30 + tank_sprite.height) / 2,
     }
+
+    cities = {
+        canvas: null,
+        ctx: null,
+        y: tank.y - (30 + city_sprite.height),
+        height: city_sprite.height,
+        init: function(){
+            this.canvas = document.createElement("canvas");
+            this.canvas.width = gameScreen.width;
+            this.canvas.height = gameScreen.height;
+            this.ctx = this.canvas.getContext("2d");
+
+            for (let i = 0; i < 4; i++) {
+                this.ctx.drawImage(
+                    city_sprite.image, 
+                    city_sprite.x, city_sprite.y,
+                    city_sprite.width, city_sprite.height,
+                    68 + 111 * i, 0, 
+                    city_sprite.width, city_sprite.height
+                );
+            }
+        },
+        generateDamage: function(x, y) {
+            x = Math.floor(x / 2) * 2;
+            y = Math.floor(y / 2) * 2;
+
+            this.ctx.clearRect(x - 2, y - 2, 4, 4);
+            this.ctx.clearRect(x + 2, y - 4, 2, 4);
+            this.ctx.clearRect(x + 4,     y, 2, 2);
+            this.ctx.clearRect(x + 2, y + 2, 2, 2);
+            this.ctx.clearRect(x - 4, y + 2, 2, 2);
+            this.ctx.clearRect(x - 6, y,     2, 2);
+            this.ctx.clearRect(x - 4, y - 4, 2, 2);
+            this.ctx.clearRect(x - 2, y - 6, 2, 2);
+        },
+        hits: function(x, y) {
+            y -= this.y;
+            let data = this.ctx.getImageData(x, y, 1, 1);
+            if ( data.data[3] !== 0) {
+                this.generateDamage(x, y);
+                return true;
+            } 
+            return false;
+        }
+    }
+    cities.init();
 
     // Create 5 Rows of aliens with the corresponding sprites and set to aliens array
     let alien_rows = [1, 0, 0, 2, 2];
@@ -82,6 +127,15 @@ function update() {
             bullets.splice(i, 1);
             i--;
             continue;
+        }
+
+        let h2 = bullet.height * 0.5;
+        if (cities.y < bullet.y + h2 && bullet.y + h2 < cities.y + cities.height) {
+            if (cities.hits(bullet.x, bullet.y + h2)) {
+                bullets.splice(i, 1);
+                i--; 
+                continue;
+            }
         }
 
         // Collision
@@ -156,6 +210,8 @@ function render() {
         gameScreen.drawBullet(bullet);
     }
     gameScreen.ctx.restore();
+
+    gameScreen.ctx.drawImage(cities.canvas, 0, cities.y)
     gameScreen.drawSprite(tank.sprite, tank.x, tank.y)
 }
 
