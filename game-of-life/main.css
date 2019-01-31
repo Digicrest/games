@@ -1,0 +1,23 @@
+#app {
+    margin: auto;
+}
+.container {
+    display: flex;
+    /* justify-content: space-between; */
+    max-width: 70%;
+}
+
+.always {
+    min-height: 15px;
+    min-width: 15px;
+    margin: 1px;
+    border-radius: 3px;
+}
+
+.dead {
+    background-color: silver;
+}
+
+.alive {
+    background-color: magenta;
+}
