@@ -1,0 +1,47 @@
+.micro-board {
+    display: flex;
+    flex-direction: column;
+ 
+    overflow: hidden;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+.micro-board-active {
+    border: 1px solid lime;
+    box-shadow: 3px 4px 6px #00000050;
+}
+
+.micro-board-inactive {
+    border: 1px dashed red;
+    opacity: 0.4;
+    background-color: #FFAAAA50;
+}
+
+.micro-board-row {
+    width: 100%;
+    display: flex;
+}
+
+.micro-board-cell {
+    flex: 1;
+    border: 1px solid #00000040;
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-family: fantasy;
+    border-bottom: none;
+}
+
+.micro-board-cell:hover {
+    background-color: #AAFFAA;
+}
+
+.micro-board-cell:nth-child(2) {
+    border-right: none;
+    border-left: none;
+}
+

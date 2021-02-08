@@ -1,0 +1,29 @@
+#title {
+    font-size: 2rem;
+    font-family: cursive;
+    opacity: 0.4;
+    text-shadow: 3px 3px 5px black;
+}
+
+
+.board {
+    width: 50vw;
+    border-radius: 10px;
+    margin: auto;
+    
+    padding: 20px;
+    border: 1px solid #00000010;
+    box-shadow: 3px 5px 7px #00000020;
+}
+
+.board-row {
+    display: flex;
+}
+
+.board-cell {
+    flex: 1;
+}
+
+.board-cell:hover {
+    background-color: #AAFFAA50;
+}
